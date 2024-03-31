@@ -23,6 +23,12 @@ class DetailViewController: UIViewController {
 
     @IBAction func didTapFavoriteButton(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
+        
+        if sender.isSelected {
+            movie.addToFavorites()
+        } else {
+            movie.removeFromFavorites()
+        }
     }
     var movie: Movie!
 
@@ -32,7 +38,12 @@ class DetailViewController: UIViewController {
         // TODO: Update favorite button selected state
         favoriteButton.layer.cornerRadius = favoriteButton.frame.width / 2
 
-
+        let favorites = Movie.getMovies(forKey: Movie.favoritesKey)
+        if favorites.contains(movie) {
+            favoriteButton.isSelected = true
+        } else {
+            favoriteButton.isSelected = false
+        }
 
 
         // MARK: Style views
