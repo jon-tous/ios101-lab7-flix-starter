@@ -30,6 +30,9 @@ class FavoritesViewController: UIViewController, UITableViewDataSource {
         }
 
         // TODO: Get favorite movies and display in table view
+        let movies = Movie.getMovies(forKey: Movie.favoritesKey)
+        self.favoriteMovies = movies
+        tableView.reloadData()
 
 
     }
