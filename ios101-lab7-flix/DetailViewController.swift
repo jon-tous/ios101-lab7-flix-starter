@@ -20,6 +20,11 @@ class DetailViewController: UIViewController {
     
     @IBAction func didTapFavoriteButton(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
+        if sender.isSelected {
+            movie.addToFavorites()
+        } else {
+            movie.removeFromFavorites()
+        }
     }
     
     var movie: Movie!
@@ -28,7 +33,12 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
 
         // TODO: Update favorite button selected state
-
+        let favorites = Movie.getMovies(forKey: Movie.favoritesKey)
+        if favorites.contains(movie) {
+            favoriteButton.isSelected = true
+        } else {
+            favoriteButton.isSelected = false
+        }
 
 
         // Set the button's corner radius to be 1/2  it's width. This will make a square button round.
