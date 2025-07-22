@@ -9,7 +9,7 @@ struct MovieFeed: Decodable {
     let results: [Movie]
 }
 
-struct Movie: Decodable {
+struct Movie: Codable, Equatable {
     let title: String
     let overview: String
     let posterPath: String? // Path used to create a URL to fetch the poster image
@@ -33,5 +33,42 @@ struct Movie: Decodable {
         case releaseDate = "release_date"
         case voteAverage = "vote_average"
         case id
+    }
+}
+
+// Methods for saving, retrieving and removing movies from favorites
+extension Movie {
+    static var favoritesKey: String {
+        return "Favorites"
+    }
+
+    static func save(_ movies: [Movie], forKey key: String) {
+        let defaults = UserDefaults.standard
+        let encodedData = try! JSONEncoder().encode(movies)
+        defaults.set(encodedData, forKey: key)
+    }
+
+    static func getMovies(forKey key: String) -> [Movie] {
+        let defaults = UserDefaults.standard
+        if let data = defaults.data(forKey: key) {
+            let decodedMovies = try! JSONDecoder().decode([Movie].self, from: data)
+            return decodedMovies
+        } else {
+            return []
+        }
+    }
+
+    func addToFavorites() {
+        var favoriteMovies = Movie.getMovies(forKey: Movie.favoritesKey)
+        favoriteMovies.append(self)
+        Movie.save(favoriteMovies, forKey: Movie.favoritesKey)
+    }
+
+    func removeFromFavorites() {
+        var favoriteMovies = Movie.getMovies(forKey: Movie.favoritesKey)
+        favoriteMovies.removeAll { movie in
+            return self == movie
+        }
+        Movie.save(favoriteMovies, forKey: Movie.favoritesKey)
     }
 }
