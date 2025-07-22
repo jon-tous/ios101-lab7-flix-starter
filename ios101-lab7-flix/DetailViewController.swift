@@ -16,10 +16,12 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var voteLabel: UILabel!
     @IBOutlet weak var releaseDateLabel: UILabel!
 
-    // TODO: Add favorite button outlet
-
-    // TODO: Add favorite button action
-
+    @IBOutlet weak var favoriteButton: UIButton!
+    
+    @IBAction func didTapFavoriteButton(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+    }
+    
     var movie: Movie!
 
     override func viewDidLoad() {
@@ -29,6 +31,8 @@ class DetailViewController: UIViewController {
 
 
 
+        // Set the button's corner radius to be 1/2  it's width. This will make a square button round.
+        favoriteButton.layer.cornerRadius = favoriteButton.frame.width / 2
 
         // MARK: Style views
         posterImageView.layer.cornerRadius = 20
